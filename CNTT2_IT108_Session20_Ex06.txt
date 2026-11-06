@@ -1,0 +1,107 @@
+# BÀI 6: NGĂN CHẶN RÒ RỈ THÔNG TIN BÍ MẬT TRÊN GITHUB
+
+## 1. Bối cảnh
+
+Nhóm em chuẩn bị đưa mã nguồn dự án thương mại điện tử lên GitHub Public để mọi người có thể kiểm tra.
+
+Tuy nhiên, nếu trong mã nguồn có chứa mật khẩu, API Key hoặc thông tin kết nối cơ sở dữ liệu thì người khác có thể lấy được và sử dụng trái phép.
+
+Vì vậy, nhóm cần kiểm tra và loại bỏ thông tin nhạy cảm trước khi đưa mã nguồn lên GitHub.
+
+## 2. Xây dựng Pre-push Checklist
+
+Trước khi đẩy mã nguồn lên GitHub, nhóm cần kiểm tra:
+
+- [ ] Không viết trực tiếp API Key trong mã nguồn.
+- [ ] Không để lộ mật khẩu hoặc thông tin database.
+- [ ] Không đưa file .env lên GitHub.
+- [ ] Kiểm tra các file có chứa thông tin nhạy cảm.
+- [ ] Sử dụng công cụ Gitleaks để quét mã nguồn.
+- [ ] Kiểm tra lại những file chuẩn bị được đẩy lên repository.
+
+Nếu phát hiện thông tin bí mật thì phải xóa khỏi mã nguồn, đồng thời thay đổi hoặc thu hồi khóa đã bị lộ.
+
+## 3. Thiết lập cấu trúc môi trường
+
+Nhóm sử dụng các file cấu hình riêng cho từng môi trường:
+
+| Môi trường | Mục đích |
+|---|---|
+| Development | Dùng khi lập trình và kiểm thử trên máy cá nhân |
+| Test | Dùng để kiểm tra chức năng |
+| Production | Dùng khi đưa sản phẩm vào sử dụng thực tế |
+
+Ví dụ cấu trúc thư mục:
+
+```text
+project/
+│
+├── src/
+├── config/
+│   ├── development.env
+│   ├── test.env
+│   └── production.env
+│
+├── .env.example
+├── .gitignore
+└── README.md
+```
+
+File .env.example chỉ chứa tên biến và giá trị mẫu, không chứa thông tin bí mật thật.
+
+Ví dụ nội dung:
+
+```env
+API_KEY=your_api_key_here
+DB_HOST=localhost
+DB_PASSWORD=your_password_here
+```
+
+Nội dung file .gitignore:
+
+```gitignore
+.env
+*.env
+!.env.example
+node_modules/
+```
+
+Nhờ vậy, Git sẽ không đưa các file chứa thông tin bí mật lên repository.
+
+## 4. Hướng dẫn bảo mật tài khoản GitHub
+
+Nhóm yêu cầu tất cả thành viên thực hiện:
+
+- Bật xác thực hai yếu tố (2FA).
+- Không chia sẻ tài khoản và mật khẩu cho người khác.
+- Sử dụng tài khoản cá nhân khi tham gia dự án.
+- Chỉ cấp quyền truy cập cần thiết cho từng thành viên.
+- Kiểm tra mã nguồn trước khi tạo Pull Request hoặc Push.
+
+## 5. Đánh giá rủi ro nếu thiếu file .gitignore
+
+Nếu không có file .gitignore, một số file chứa thông tin nhạy cảm như .env, mật khẩu hoặc API Key có thể bị đẩy lên GitHub.
+
+Hậu quả có thể xảy ra:
+
+- Hacker lấy được API Key và sử dụng trái phép.
+- Thông tin database bị lộ.
+- Dữ liệu khách hàng có nguy cơ bị đánh cắp.
+- Dự án có thể bị mất an toàn và gây thiệt hại kinh tế.
+
+**Cách khắc phục:**
+
+- Tạo file .gitignore.
+- Quét mã nguồn bằng Gitleaks.
+- Thu hồi các khóa đã bị lộ.
+- Kiểm tra lại lịch sử Git nếu cần.
+
+## 6. Kết quả đạt được
+
+Sau khi thực hiện các bước trên, repository GitHub sẽ an toàn hơn vì không chứa các file cấu hình bí mật.
+
+Các thành viên cũng biết cách bảo vệ tài khoản và kiểm tra mã nguồn trước khi đưa lên GitHub Public.
+
+## 7. Kết luận
+
+Việc bảo vệ thông tin bí mật trước khi đưa mã nguồn lên GitHub là rất quan trọng. Sử dụng .gitignore, Gitleaks và xác thực hai yếu tố sẽ giúp hạn chế nguy cơ rò rỉ dữ liệu và bảo vệ dự án tốt hơn.
